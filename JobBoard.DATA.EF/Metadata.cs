@@ -76,6 +76,7 @@ namespace JobBoard.DATA.EF
 		public string ManagerId { get; set; }
 	}
 
+	[MetadataType(typeof(LocationMetadata))]
 	public partial class Location { }
 
 	public class OpenPositionMetadata
