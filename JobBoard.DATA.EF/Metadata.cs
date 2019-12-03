@@ -10,24 +10,30 @@ namespace JobBoard.DATA.EF
 	public class ApplicationMetadata
 	{
 		[Required(ErrorMessage = "*")]
+		[Display(Name = "Open Position")]
 		public int OpenPositionId { get; set; }
 
 		[Required(ErrorMessage = "*")]
 		[StringLength(128, ErrorMessage = "Value can be a maximum of 128 characters")]
+		[Display(Name = "Applicant")]
 		public string UserId { get; set; }
 
 		[Required(ErrorMessage = "*")]
+		[Display(Name = "Applied On")]
 		public System.DateTime ApplicationDate { get; set; }
 
 		[StringLength(2000, ErrorMessage = "Value can be a maximum of 2000 characters")]
 		[UIHint("MultilineText")]
+		[Display(Name = "Notes")]
 		public string ManagerNotes { get; set; }
 
 		[Required(ErrorMessage = "*")]
+		[Display(Name = "Status")]
 		public int ApplicationStatusId { get; set; }
 
 		[Required(ErrorMessage = "*")]
 		[StringLength(75, ErrorMessage = "Filename can be a maximum of 75 characters")]
+		[Display(Name = "Resume")]
 		public string ResumeFilename { get; set; }
 	}
 
@@ -38,6 +44,7 @@ namespace JobBoard.DATA.EF
 	{
 		[Required(ErrorMessage = "*")]
 		[StringLength(50, ErrorMessage = "Value can be a maximum of 50 characters")]
+		[Display(Name = "Status")]
 		public string StatusName { get; set; }
 
 		[StringLength(250, ErrorMessage = "Value can be a maximum of 250 characters")]
@@ -52,6 +59,7 @@ namespace JobBoard.DATA.EF
 	{
 		[Required(ErrorMessage = "*")]
 		[StringLength(10, ErrorMessage = "Value can be a maximum of 10 characters")]
+		[Display(Name = "Office Number")]
 		public string OfficeNumber { get; set; }
 
 		[Required(ErrorMessage = "*")]
@@ -64,6 +72,7 @@ namespace JobBoard.DATA.EF
 
 		[Required(ErrorMessage = "*")]
 		[StringLength(128, ErrorMessage = "Value can be a maximum of 128 characters")]
+		[Display(Name = "Manager")]
 		public string ManagerId { get; set; }
 	}
 
@@ -72,9 +81,11 @@ namespace JobBoard.DATA.EF
 	public class OpenPositionMetadata
 	{
 		[Required(ErrorMessage = "*")]
+		[Display(Name = "Position")]
 		public int PositionId { get; set; }
 
 		[Required(ErrorMessage = "*")]
+		[Display(Name = "Location")]
 		public int LocationId { get; set; }
 	}
 
@@ -95,22 +106,13 @@ namespace JobBoard.DATA.EF
 	[MetadataType(typeof(PositionMetadata))]
 	public partial class Position { }
 
-	public class UserDetailMetadata
+	public partial class UserDetail
 	{
-		[Required(ErrorMessage = "*")]
-		[StringLength(50, ErrorMessage = "Value can be a maximum of 50 characters")]
-		public string FirstName { get; set; }
-
-		[Required(ErrorMessage = "*")]
-		[StringLength(50, ErrorMessage = "Value can be a maximum of 50 characters")]
-		public string LastName { get; set; }
-
-		[StringLength(75, ErrorMessage = "Value can be a maximum of 75 characters")]
-		[DisplayFormat(NullDisplayText = "n/a")]
-		public string ResumeFilename { get; set; }
+		[Display(Name = "Full Name")]
+		public string FullName
+		{
+			get { return $"{FirstName} {LastName}"; }
+		}
 	}
-
-	[MetadataType(typeof(UserDetailMetadata))]
-	public partial class UserDetail { }
 
 }
