@@ -179,7 +179,15 @@ namespace JobBoard.UI.MVC.Controllers
 		public ActionResult DeleteConfirmed(int id)
 		{
 			OpenPosition openPosition = db.OpenPositions.Find(id);
-			if (User.IsInRole("Manager") && openPosition.Location.ManagerId == User.Identity.GetUserId())
+			if (User.IsInRole("Manager"))
+			{
+				if (openPosition.Location.ManagerId == User.Identity.GetUserId())
+				{
+					db.OpenPositions.Remove(openPosition);
+					db.SaveChanges();
+				}
+			}
+			else
 			{
 				db.OpenPositions.Remove(openPosition);
 				db.SaveChanges();

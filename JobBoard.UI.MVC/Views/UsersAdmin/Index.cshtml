@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<JobBoard.UI.MVC.Models.ApplicationUser>
+@using JobBoard.DATA.EF
+@using Microsoft.AspNet.Identity
 
 @{
 	ViewBag.Title = "Index";
+	JobBoardEntities db = new JobBoardEntities();
 }
 
 <h2>Index</h2>
@@ -15,15 +18,22 @@
 			@Html.DisplayNameFor(model => model.UserName)
 		</th>
 		<th>
+			Full Name
+		</th>
+		<th>
 
 		</th>
 	</tr>
 
 	@foreach (var item in Model)
 	{
+		var userDetails = db.UserDetails.Find(item.Id);
 		<tr>
 			<td>
 				@Html.DisplayFor(modelItem => item.UserName)
+			</td>
+			<td>
+				@Html.DisplayFor(ud => userDetails.FullName)
 			</td>
 			<td>
 				@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
