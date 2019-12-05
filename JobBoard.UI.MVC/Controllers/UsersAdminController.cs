@@ -177,8 +177,8 @@ namespace JobBoard.UI.MVC.Controllers
 					return HttpNotFound();
 				}
 
-				user.UserName = editUser.Email;
-				user.Email = editUser.Email;
+				//user.UserName = editUser.Email;
+				//user.Email = editUser.Email;
 
 				var userRoles = await UserManager.GetRolesAsync(user.Id);
 
@@ -238,7 +238,7 @@ namespace JobBoard.UI.MVC.Controllers
 				var user = await UserManager.FindByIdAsync(id);
 				JobBoardEntities db = new JobBoardEntities();
 				var userDetails = await db.UserDetails.FindAsync(id);
-				
+
 				if (user == null)
 				{
 					return HttpNotFound();

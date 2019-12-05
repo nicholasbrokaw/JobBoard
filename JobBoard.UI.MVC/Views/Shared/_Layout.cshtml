@@ -28,11 +28,12 @@
 					<li>@Html.ActionLink("Positions", "Index", "Positions")</li>
 					<li>@Html.ActionLink("Open Positions", "Index", "OpenPositions")</li>
 					<li>@Html.ActionLink("Application Statuses", "Index", "ApplicationStatuses")</li>
+					<li>@Html.ActionLink("Applications", "Index", "Applications")</li>
 
 					@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 					{
-						<li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-						<li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+						<li>@Html.ActionLink("Roles", "Index", "RolesAdmin")</li>
+						<li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
 					}
 				</ul>
 				@Html.Partial("_LoginPartial")

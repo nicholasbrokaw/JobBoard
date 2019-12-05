@@ -1,44 +1,66 @@
 ﻿@model JobBoard.UI.MVC.Models.ApplicationUser
+@using JobBoard.DATA.EF;
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Details";
+	JobBoardEntities db = new JobBoardEntities();
+	var userDetails = db.UserDetails.Find(Model.Id);
 }
 
 <h2>Details.</h2>
 
 <div>
-    <h4>User</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-    </dl>
+	<h4>User</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(ud => userDetails.FullName)
+		</dt>
+		<dd>
+			@Html.DisplayFor(ud => userDetails.FullName)
+		</dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.Email)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.Email)
+		</dd>
+		<dt>
+			Resume
+		</dt>
+		<dd>
+			@if (userDetails.ResumeFilename != null)
+			{
+				<embed src="@Url.Content($"~/Content/resumes/{userDetails.ResumeFilename}")" />
+			}
+			else
+			{
+				<span>User has not uploaded a resume yet.</span>
+			}
+		</dd>
+	</dl>
 </div>
 <h4>List of roles for this user</h4>
 @if (ViewBag.RoleNames.Count == 0)
 {
-    <hr />
-    <p>No roles found for this user.</p>
+	<hr />
+	<p>No roles found for this user.</p>
 }
 
 <table class="table">
 
-    @foreach (var item in ViewBag.RoleNames)
-    {
-        <tr>
-            <td>
-                @item
-            </td>
-        </tr>
-    }
+	@foreach (var item in ViewBag.RoleNames)
+	{
+		<tr>
+			<td>
+				@item
+			</td>
+		</tr>
+	}
 </table>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+	@Html.ActionLink("Back to List", "Index")
 </p>
 
 
