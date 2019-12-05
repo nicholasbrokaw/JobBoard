@@ -214,10 +214,18 @@ namespace JobBoard.UI.MVC.Controllers
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 			var user = await UserManager.FindByIdAsync(id);
+			JobBoardEntities db = new JobBoardEntities();
+			var userDetails = db.UserDetails.Find(id);
+
 			if (user == null)
 			{
 				return HttpNotFound();
 			}
+			if (userDetails.Applications.Count > 0 || userDetails.Locations.Count > 0)
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			return View(user);
 		}
 
@@ -243,6 +251,11 @@ namespace JobBoard.UI.MVC.Controllers
 				{
 					return HttpNotFound();
 				}
+				if (userDetails.Applications.Count > 0 || userDetails.Locations.Count > 0)
+				{
+					return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+				}
+
 				var result = await UserManager.DeleteAsync(user);
 				db.UserDetails.Remove(userDetails);
 				db.SaveChanges();
