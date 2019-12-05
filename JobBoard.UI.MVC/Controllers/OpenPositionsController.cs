@@ -169,6 +169,11 @@ namespace JobBoard.UI.MVC.Controllers
 			{
 				return HttpNotFound();
 			}
+			if (openPosition.Applications.Count > 0)
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			return View(openPosition);
 		}
 
@@ -179,6 +184,11 @@ namespace JobBoard.UI.MVC.Controllers
 		public ActionResult DeleteConfirmed(int id)
 		{
 			OpenPosition openPosition = db.OpenPositions.Find(id);
+			if (openPosition.Applications.Count > 0)
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			if (User.IsInRole("Manager"))
 			{
 				if (openPosition.Location.ManagerId == User.Identity.GetUserId())
