@@ -102,6 +102,11 @@ namespace JobBoard.UI.MVC.Controllers
 			{
 				return HttpNotFound();
 			}
+			if (position.OpenPositions.Count > 0)
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			return View(position);
 		}
 
@@ -111,6 +116,11 @@ namespace JobBoard.UI.MVC.Controllers
 		public ActionResult DeleteConfirmed(int id)
 		{
 			Position position = db.Positions.Find(id);
+			if (position.OpenPositions.Count > 0)
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			db.Positions.Remove(position);
 			db.SaveChanges();
 			return RedirectToAction("Index");
