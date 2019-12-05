@@ -108,6 +108,10 @@ namespace JobBoard.UI.MVC.Controllers
 			{
 				return HttpNotFound();
 			}
+			if (applicationStatus.Applications.Count > 0 || applicationStatus.StatusName.ToLower() == "pending")
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
 			return View(applicationStatus);
 		}
 
@@ -118,6 +122,11 @@ namespace JobBoard.UI.MVC.Controllers
 		public ActionResult DeleteConfirmed(int id)
 		{
 			ApplicationStatus applicationStatus = db.ApplicationStatuses.Find(id);
+			if (applicationStatus.Applications.Count > 0 || applicationStatus.StatusName.ToLower() == "pending")
+			{
+				return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+			}
+
 			db.ApplicationStatuses.Remove(applicationStatus);
 			db.SaveChanges();
 			return RedirectToAction("Index");
