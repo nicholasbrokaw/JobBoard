@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 
 # Resumes
-/JobBoard.UI.MVC/Content/resumes
+/JobBoard.UI.MVC/Content/resumes/*
