@@ -107,6 +107,24 @@ namespace JobBoard.DATA.EF
 	[MetadataType(typeof(PositionMetadata))]
 	public partial class Position { }
 
+	public class UserDetailMetadata
+	{
+		[Required(ErrorMessage = "*")]
+		[StringLength(50, ErrorMessage = "Value can be a maximum of 50 characters")]
+		[Display(Name = "First Name")]
+		public string FirstName { get; set; }
+
+		[Required(ErrorMessage = "*")]
+		[StringLength(50, ErrorMessage = "Value can be a maximum of 50 characters")]
+		[Display(Name = "Last Name")]
+		public string LastName { get; set; }
+
+		[StringLength(75, ErrorMessage = "Value can be a maximum of 75 characters")]
+		[Display(Name = "Resume")]
+		public string ResumeFilename { get; set; }
+	}
+
+	[MetadataType(typeof(UserDetailMetadata))]
 	public partial class UserDetail
 	{
 		[Display(Name = "Full Name")]
