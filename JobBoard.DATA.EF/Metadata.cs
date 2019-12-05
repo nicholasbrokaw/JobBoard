@@ -20,11 +20,13 @@ namespace JobBoard.DATA.EF
 
 		[Required(ErrorMessage = "*")]
 		[Display(Name = "Applied On")]
+		[DisplayFormat(DataFormatString = "{0:d}")]
 		public System.DateTime ApplicationDate { get; set; }
 
 		[StringLength(2000, ErrorMessage = "Value can be a maximum of 2000 characters")]
 		[UIHint("MultilineText")]
 		[Display(Name = "Notes")]
+		[DisplayFormat(NullDisplayText = "n/a")]
 		public string ManagerNotes { get; set; }
 
 		[Required(ErrorMessage = "*")]
