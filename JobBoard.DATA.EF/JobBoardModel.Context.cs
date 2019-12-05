@@ -31,5 +31,7 @@ namespace JobBoard.DATA.EF
         public virtual DbSet<OpenPosition> OpenPositions { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<UserDetail> UserDetails { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
     }
 }

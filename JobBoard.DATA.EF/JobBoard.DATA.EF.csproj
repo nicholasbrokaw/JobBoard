@@ -56,6 +56,12 @@
     <Compile Include="ApplicationStatus.cs">
       <DependentUpon>JobBoardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>JobBoardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserRole.cs">
+      <DependentUpon>JobBoardModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Metadata.cs" />
     <Compile Include="JobBoardModel.Context.cs">
       <AutoGen>True</AutoGen>
