@@ -48,11 +48,11 @@ namespace JobBoard.UI.MVC.Controllers
 			if (User.IsInRole("Manager"))
 			{
 				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "OfficeNumber");
+				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary");
 			}
 			else
 			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "OfficeNumber");
+				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary");
 			}
 			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title");
 			return View();
@@ -82,11 +82,11 @@ namespace JobBoard.UI.MVC.Controllers
 			if (User.IsInRole("Manager"))
 			{
 				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			else
 			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
 			return View(openPosition);
@@ -108,11 +108,11 @@ namespace JobBoard.UI.MVC.Controllers
 			if (User.IsInRole("Manager"))
 			{
 				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			else
 			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
 			return View(openPosition);
@@ -146,11 +146,11 @@ namespace JobBoard.UI.MVC.Controllers
 			if (User.IsInRole("Manager"))
 			{
 				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			else
 			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "OfficeNumber", openPosition.LocationId);
+				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary", openPosition.LocationId);
 			}
 			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
 			return View(openPosition);

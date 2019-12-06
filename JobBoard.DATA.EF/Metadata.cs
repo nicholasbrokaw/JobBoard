@@ -79,7 +79,20 @@ namespace JobBoard.DATA.EF
 	}
 
 	[MetadataType(typeof(LocationMetadata))]
-	public partial class Location { }
+	public partial class Location
+	{
+		[Display(Name = "Location")]
+		public string FullSummary
+		{
+			get { return $"{OfficeNumber} | {City}, {State} | {UserDetail.FullName}"; }
+		}
+
+		[Display(Name = "Location")]
+		public string Summary
+		{
+			get { return $"{City}, {State}"; }
+		}
+	}
 
 	public class OpenPositionMetadata
 	{

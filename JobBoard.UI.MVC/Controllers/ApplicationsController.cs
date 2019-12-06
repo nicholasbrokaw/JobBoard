@@ -40,7 +40,7 @@ namespace JobBoard.UI.MVC.Controllers
 
 		// GET: Applications/Details/5
 		[Authorize(Roles = "Admin, Manager, Employee")]
-		public ActionResult Details(int? id)
+		public ActionResult Review(int? id)
 		{
 			if (id == null)
 			{
@@ -54,18 +54,6 @@ namespace JobBoard.UI.MVC.Controllers
 			return View(application);
 		}
 
-		//// GET: Applications/Create
-		//public ActionResult Create()
-		//{
-		//	ViewBag.ApplicationStatusId = new SelectList(db.ApplicationStatuses, "ApplicationStatusId", "StatusName");
-		//	ViewBag.OpenPositionId = new SelectList(db.OpenPositions, "OpenPositionId", "OpenPositionId");
-		//	ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName");
-		//	return View();
-		//}
-
-		// POST: Applications/Create
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpGet]
 		[Authorize(Roles = "Employee")]
 		public ActionResult Apply(int openPositionId)
@@ -89,10 +77,6 @@ namespace JobBoard.UI.MVC.Controllers
 			db.Applications.Add(application);
 			db.SaveChanges();
 			return RedirectToAction("Index");
-
-			//ViewBag.ApplicationStatusId = new SelectList(db.ApplicationStatuses, "ApplicationStatusId", "StatusName", application.ApplicationStatusId);
-			//ViewBag.OpenPositionId = new SelectList(db.OpenPositions, "OpenPositionId", "OpenPositionId", application.OpenPositionId);
-			//ViewBag.UserId = new SelectList(db.UserDetails, "UserId", "FirstName", application.UserId);
 		}
 
 		// GET: Applications/Edit/5
