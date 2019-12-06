@@ -1,8 +1,10 @@
 ﻿using JobBoard.UI.MVC.Models;
+using JobBoard.DATA.EF;
 using System;
 using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace JobBoard.UI.MVC.Controllers
 {
@@ -24,12 +26,15 @@ namespace JobBoard.UI.MVC.Controllers
 		}
 
 		[HttpGet]
+		[Authorize]
 		public ActionResult Help()
 		{
 			return View();
 		}
 
 		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
 		public ActionResult Help(ContactViewModel cvm)
 		{
 			if (!ModelState.IsValid)
@@ -37,42 +42,40 @@ namespace JobBoard.UI.MVC.Controllers
 				return View(cvm);
 			}
 
-			string message = $"Message from: {cvm.FullName} at {cvm.Email}<br />Message: {cvm.Message}";
+			JobBoardEntities db = new JobBoardEntities();
 
-			MailMessage mm = new MailMessage("admin@nicholasbrokaw.com", "brokawnd@gmail.com", cvm.Subject, message)
+			string fullName = db.UserDetails.Find(User.Identity.GetUserId()).FullName;
+			string email = User.Identity.GetUserName();
+
+			string message = $"Message from: {fullName} at {email}<br />Message: {cvm.Message}";
+
+			MailMessage mm = new MailMessage("sender", "recipient", cvm.Subject, message)
 			{
 				IsBodyHtml = true,
 				Priority = MailPriority.High
 			};
 
-			mm.ReplyToList.Add(cvm.Email);
+			mm.ReplyToList.Add(email);
 
-			SmtpClient client = new SmtpClient("mail.nicholasbrokaw.com")
+			SmtpClient client = new SmtpClient("mailServer")
 			{
-				Credentials = new NetworkCredential("d1908nbrokaw", "Twinkie829604")
+				Credentials = new NetworkCredential("username", "password")
 			};
 
 			try
 			{
-				client.Send(mm);
-			}catch(Exception ex)
+				//client.Send(mm);
+				TempData["demoMode"] = true;
+			}
+			catch (Exception ex)
 			{
-				ViewBag.ErrorMessage = ex.StackTrace;
+				ViewBag.emailError = ex;
 				return View(cvm);
 			}
 
-			return RedirectToAction("Contact");
-		}
+			TempData["emailSuccess"] = true;
 
-		[HttpPost]
-		public ActionResult BuildEmail(ContactViewModel cvm)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(cvm);
-			}
-
-			return Content("", "application/json");
+			return RedirectToAction("Help");
 		}
 	}
 }

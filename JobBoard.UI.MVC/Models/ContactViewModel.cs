@@ -9,13 +9,6 @@ namespace JobBoard.UI.MVC.Models
 	public class ContactViewModel
 	{
 		[Required(ErrorMessage = "*")]
-		public string FullName { get; set; }
-
-		[Required(ErrorMessage = "*")]
-		[DataType(DataType.EmailAddress)]
-		public string Email { get; set; }
-
-		[Required(ErrorMessage = "*")]
 		[StringLength(100, ErrorMessage = "Value can be a maximum of 100 characters")]
 		public string Subject { get; set; }
 
