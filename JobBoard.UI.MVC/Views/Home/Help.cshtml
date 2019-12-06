@@ -1,0 +1,16 @@
+﻿@model JobBoard.UI.MVC.Models.ContactViewModel
+@using JobBoard.DATA.EF
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Help";
+
+	JobBoardEntities db = new JobBoardEntities();
+}
+
+<div>
+    <form>
+		@Html.HiddenFor(model => db.UserDetails.Find(User.Identity.GetUserId()).UserId)
+		
+	</form>
+</div>
