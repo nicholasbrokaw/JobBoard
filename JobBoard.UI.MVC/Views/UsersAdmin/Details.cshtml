@@ -31,7 +31,7 @@
 		<dd>
 			@if (userDetails.ResumeFilename != null)
 			{
-				<embed src="@Url.Content($"~/Content/resumes/{userDetails.ResumeFilename}")" />
+				<canvas id="resumeCanvas"></canvas>
 			}
 			else
 			{
@@ -63,5 +63,28 @@
 	@Html.ActionLink("Back to List", "Index")
 </p>
 
+@section scripts {
+	<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+	<script>
+		var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
+		var loadingTask = pdfjsLib.getDocument("../../Content/resumes/" + "@userDetails.ResumeFilename");
+		loadingTask.promise.then(function (pdf) {
+			pdf.getPage(1).then(function (page) {
+				var scale = .8;
+				var viewport = page.getViewport({ scale: scale });
 
+				var canvas = document.getElementById('resumeCanvas');
+				var context = canvas.getContext('2d');
+				canvas.height = viewport.height;
+				canvas.width = viewport.width;
+
+				var renderContext = {
+					canvasContext: context,
+					viewport: viewport
+				};
+				page.render(renderContext);
+			});
+		});
+	</script>
+}
