@@ -40,7 +40,7 @@ namespace JobBoard.UI.MVC.Controllers
 
 		// GET: Applications/Details/5
 		[Authorize(Roles = "Admin, Manager, Employee")]
-		public ActionResult Review(int? id)
+		public ActionResult Details(int? id)
 		{
 			if (id == null)
 			{
