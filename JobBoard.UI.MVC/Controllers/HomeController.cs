@@ -49,7 +49,7 @@ namespace JobBoard.UI.MVC.Controllers
 
 			string message = $"Message from: {fullName} at {email}<br />Message: {cvm.Message}";
 
-			MailMessage mm = new MailMessage("sender", "recipient", cvm.Subject, message)
+			MailMessage mm = new MailMessage("sender@email.com", "recipient@email.com", cvm.Subject, message)
 			{
 				IsBodyHtml = true,
 				Priority = MailPriority.High
