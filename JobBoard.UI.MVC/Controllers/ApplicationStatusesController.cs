@@ -21,22 +21,6 @@ namespace JobBoard.UI.MVC.Controllers
 			return View(db.ApplicationStatuses.ToList());
 		}
 
-		// GET: ApplicationStatus/Details/5
-		[Authorize(Roles = "Admin, Manager")]
-		public ActionResult Details(int? id)
-		{
-			if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			ApplicationStatus applicationStatus = db.ApplicationStatuses.Find(id);
-			if (applicationStatus == null)
-			{
-				return HttpNotFound();
-			}
-			return View(applicationStatus);
-		}
-
 		// GET: ApplicationStatus/Create
 		[Authorize(Roles = "Admin")]
 		public ActionResult Create()
