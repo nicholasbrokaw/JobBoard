@@ -3,52 +3,101 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - My ASP.NET Application</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/Content/images/favicon.ico")" />
+
+	<title>@ViewBag.Title - JobBoard | Victisoft, Inc.</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				@Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Home", "Index", "Home")</li>
-					<li>@Html.ActionLink("Help", "Help", "Home")</li>
-					<li>@Html.ActionLink("Locations", "Index", "Locations")</li>
-					<li>@Html.ActionLink("Positions", "Index", "Positions")</li>
-					<li>@Html.ActionLink("Openings", "Index", "OpenPositions")</li>
-					<li>@Html.ActionLink("Statuses", "Index", "ApplicationStatuses")</li>
-					<li>@Html.ActionLink("Applications", "Index", "Applications")</li>
+	@*<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<img class="navbar-brand" src="@Url.Content("~/Content/images/logo.png")" />
+					@Html.ActionLink("Victisoft, Inc.", "Index", "Home", null, new { @class = "navbar-brand" })
+				</div>
+				<nav class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+						{
+							<li>@Html.ActionLink("Locations", "Index", "Locations", null, new { @class = "nav-link" })</li>
+						}
+						<li>@Html.ActionLink("Positions", "Index", "Positions", null, new { @class = "nav-link" })</li>
+						<li>@Html.ActionLink("Openings", "Index", "OpenPositions", null, new { @class = "nav-link" })</li>
+						<li>@Html.ActionLink("Statuses", "Index", "ApplicationStatuses", null, new { @class = "nav-link" })</li>
+						<li>@Html.ActionLink("Applications", "Index", "Applications", null, new { @class = "nav-link" })</li>
 
-					@if (Request.IsAuthenticated && User.IsInRole("Admin"))
+						@if (Request.IsAuthenticated && User.IsInRole("Admin"))
+						{
+							<li>@Html.ActionLink("Roles", "Index", "RolesAdmin", null, new { @class = "nav-link" })</li>
+							<li>@Html.ActionLink("Users", "Index", "UsersAdmin", null, new { @class = "nav-link" })</li>
+						}
+					</ul>
+					@Html.Partial("_LoginPartial")
+				</nav>
+			</div>
+		</div>*@
+
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<div class="container">
+			<a href="@Url.Action("Index", "Home")" class="navbar-brand"><img src="@Url.Content("~/Content/images/logo.png")" width="30" height="30" class="d-inline-block align-top" /> Victisoft, Inc.</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav mr-auto">
+					@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
 					{
-						<li>@Html.ActionLink("Roles", "Index", "RolesAdmin")</li>
-						<li>@Html.ActionLink("Users", "Index", "UsersAdmin")</li>
+						<li class="nav-item">@Html.ActionLink("Locations", "Index", "Locations", null, new { @class = "nav-link" })</li>
 					}
+					<li class="nav-item">
+						@Html.ActionLink("Positions", "Index", "Positions", null, new { @class = "nav-link" })
+					</li>
+					<li class="nav-item">
+						@Html.ActionLink("Openings", "Index", "OpenPositions", null, new { @class = "nav-link" })
+					</li>
+					<li class="nav-item">
+						@Html.ActionLink("Statuses", "Index", "ApplicationStatuses", null, new { @class = "nav-link" })
+					</li>
+					<li class="nav-item">
+						@Html.ActionLink("Applications", "Index", "Applications", null, new { @class = "nav-link" })
+					</li>
 				</ul>
 				@Html.Partial("_LoginPartial")
 			</div>
 		</div>
-	</div>
-	<div class="container body-content">
+	</nav>
+
+	<div class="container">
 		@RenderBody()
 		<hr />
-		<footer>
-			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+		<footer class="text-center">
+			<p>&copy; @DateTime.Now.Year - Victisoft, Inc.</p>
 		</footer>
 	</div>
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")
+
+	<!-- Navbar Active Link -->
+	<script>
+		$(function () {
+			$("nav .navbar-nav li a").each(function () {
+				if ($(this).attr("href") == window.location.pathname) {
+					$(this).parent().addClass("active");
+				}
+			});
+		});
+	</script>
+
 	@RenderSection("scripts", required: false)
 </body>
 </html>
