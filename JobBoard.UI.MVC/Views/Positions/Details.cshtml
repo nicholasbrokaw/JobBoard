@@ -1,34 +1,61 @@
 ﻿@model JobBoard.DATA.EF.Position
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Details";
 }
 
 <h2>Details</h2>
 
 <div>
-    <h4>Position</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+	<h4>Position</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.Title)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.Title)
+		</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+		<dt>
+			@Html.DisplayNameFor(model => model.Description)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.Description)
+		</dd>
 
-    </dl>
+	</dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PositionId }) |
-    @Html.ActionLink("Back to List", "Index")
+	@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+	{
+		if (User.IsInRole("Manager"))
+		{
+			<button class="btn btn-primary" onclick="createOpeningFor(@Model.PositionId, true)">
+				New Opening
+			</button>
+		}
+		else
+		{
+			@Html.ActionLink("New Opening", "CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false }, new { @class = "btn btn-primary" })
+		}
+		if (Model.OpenPositions.Count == 0)
+		{
+			@Html.ActionLink("Edit", "Edit", new { id = Model.PositionId }, new { @class = "btn btn-secondary" }) <span>|</span>
+		}
+	}
+	@Html.ActionLink("Openings", "Index", "OpenPositions", new { id = Model.PositionId }, new { @class = "btn btn-primary" })
+	@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
 </p>
+
+@section scripts
+{
+	<script>
+		async function createOpeningFor(positionId, isFetch) {
+			let response = await fetch(`/OpenPositions/CreateFor?positionId=${positionId}&isFetch=${isFetch}`);
+			document.location.href = "/OpenPositions/Index";
+		}
+	</script>
+}

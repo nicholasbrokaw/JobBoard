@@ -102,7 +102,7 @@ namespace JobBoard.UI.MVC.Controllers
 					newDetails.UserId = user.Id;
 					newDetails.FirstName = userViewModel.FirstName;
 					newDetails.LastName = userViewModel.LastName;
-					newDetails.ResumeFilename = userViewModel.ResumeFilename; //TODO: Handle resume upload
+					newDetails.ResumeFilename = userViewModel.ResumeFilename;
 
 					JobBoardEntities db = new JobBoardEntities();
 					db.UserDetails.Add(newDetails);

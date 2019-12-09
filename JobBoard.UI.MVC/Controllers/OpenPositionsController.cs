@@ -58,6 +58,38 @@ namespace JobBoard.UI.MVC.Controllers
 			return View();
 		}
 
+		[Authorize(Roles = "Admin, Manager")]
+		public ActionResult CreateFor(int positionId, bool isFetch)
+		{
+			if (isFetch)
+			{
+				string managerId = User.Identity.GetUserId();
+				int managerLocationId = db.Locations.Where(m => m.ManagerId == managerId).Select(l => l.LocationId).Single();
+
+				OpenPosition openPosition = new OpenPosition() { PositionId = positionId, LocationId = managerLocationId };
+
+				db.OpenPositions.Add(openPosition);
+				db.SaveChanges();
+
+				return Content("{\"success\": true}", "application/json");
+			}
+			else
+			{
+				OpenPosition openPosition = new OpenPosition() { PositionId = positionId };
+				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary");
+				ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
+
+				return View("Create", openPosition);
+			}
+		}
+
+		//[Authorize(Roles = "Admin")]
+		//public ActionResult Create(int positionId, string managerId)
+		//{
+		//	int managerLocationId = db
+		//	return Content("{\"success\": true}", "application/json");
+		//}
+
 		// POST: OpenPositions/Create
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -71,78 +103,14 @@ namespace JobBoard.UI.MVC.Controllers
 				if (User.IsInRole("Manager"))
 				{
 					string managerId = User.Identity.GetUserId();
-					int managerLocation = db.Locations.Where(m => m.ManagerId == managerId).Select(l => l.LocationId).Single();
-					openPosition.LocationId = managerLocation;
+					int managerLocationId = db.Locations.Where(m => m.ManagerId == managerId).Select(l => l.LocationId).Single();
+					openPosition.LocationId = managerLocationId;
 				}
 				db.OpenPositions.Add(openPosition);
 				db.SaveChanges();
 				return RedirectToAction("Index");
 			}
 
-			if (User.IsInRole("Manager"))
-			{
-				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary", openPosition.LocationId);
-			}
-			else
-			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary", openPosition.LocationId);
-			}
-			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
-			return View(openPosition);
-		}
-
-		// GET: OpenPositions/Edit/5
-		[Authorize(Roles = "Admin, Manager")]
-		public ActionResult Edit(int? id)
-		{
-			if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			OpenPosition openPosition = db.OpenPositions.Find(id);
-			if (openPosition == null | (User.IsInRole("Manager") && openPosition.Location.ManagerId != User.Identity.GetUserId()))
-			{
-				return HttpNotFound();
-			}
-			if (User.IsInRole("Manager"))
-			{
-				string managerId = User.Identity.GetUserId();
-				ViewBag.LocationId = new SelectList(db.Locations.Where(l => l.ManagerId == managerId), "LocationId", "FullSummary", openPosition.LocationId);
-			}
-			else
-			{
-				ViewBag.LocationId = new SelectList(db.Locations, "LocationId", "FullSummary", openPosition.LocationId);
-			}
-			ViewBag.PositionId = new SelectList(db.Positions, "PositionId", "Title", openPosition.PositionId);
-			return View(openPosition);
-		}
-
-		// POST: OpenPositions/Edit/5
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		[Authorize(Roles = "Admin, Manager")]
-		public ActionResult Edit([Bind(Include = "OpenPositionId,PositionId,LocationId")] OpenPosition openPosition)
-		{
-			if (ModelState.IsValid)
-			{
-				if (User.IsInRole("Manager"))
-				{
-					if (db.Locations.Where(l => l.LocationId == openPosition.LocationId).Single().ManagerId == User.Identity.GetUserId())
-					{
-						db.Entry(openPosition).State = EntityState.Modified;
-						db.SaveChanges();
-					}
-				}
-				else
-				{
-					db.Entry(openPosition).State = EntityState.Modified;
-					db.SaveChanges();
-				}
-				return RedirectToAction("Index");
-			}
 			if (User.IsInRole("Manager"))
 			{
 				string managerId = User.Identity.GetUserId();

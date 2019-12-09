@@ -1,39 +1,51 @@
 ﻿@model IEnumerable<JobBoard.DATA.EF.Position>
+@using JobBoard.DATA.EF
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Index";
+
+	JobBoardEntities db = new JobBoardEntities();
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (User.IsInRole("Admin"))
+{
+	<p>
+		@Html.ActionLink("Create New", "Create")
+	</p>
+}
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.Title)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Description)
+		</th>
+		<th></th>
+	</tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PositionId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PositionId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PositionId })
-        </td>
-    </tr>
-}
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Description)
+			</td>
+			<td>
+				@Html.ActionLink("Details", "Details", new { id = item.PositionId })
+				@if (User.IsInRole("Admin"))
+				{
+					<span>|</span>
+					if (db.Positions.Find(item.PositionId).OpenPositions.Count == 0)
+					{
+						@Html.ActionLink("Edit", "Edit", new { id = item.PositionId }) <span>|</span>
+					}
+					@Html.ActionLink("Delete", "Delete", new { id = item.PositionId })
+				}
+			</td>
+		</tr>
+	}
 
 </table>
