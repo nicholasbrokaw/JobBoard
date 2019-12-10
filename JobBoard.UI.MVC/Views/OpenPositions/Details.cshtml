@@ -1,42 +1,65 @@
 ﻿@model JobBoard.DATA.EF.OpenPosition
 
 @{
-	ViewBag.Title = "Details";
+	ViewBag.Title = "Openings";
 }
 
-<h2>Details</h2>
+<main>
+	<section class="d-flex justify-content-center" id="openingDetails">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				<div class="card-body">
+					<h5 class="card-title text-center mb-3">@Html.DisplayFor(model => model.Position.Title)</h5>
+					<div class="row mb-3">
+						<div class="col-12 col-md-4">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.Location.Summary):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.Location.City), @Html.DisplayFor(model => model.Location.State)</span>
+						</div>
+						<div class="col-12 col-md-4 text-md-center">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.Location.OfficeNumber):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.Location.OfficeNumber)</span>
+						</div>
+						<div class="col-12 col-md-4 text-md-right">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.Location.ManagerId):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.Location.UserDetail.FullName)</span>
+						</div>
+					</div>
+					<hr />
+					<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.Position.Description):</h6>
+					<p class="card-text text-justify">@Html.DisplayFor(model => model.Position.Description)</p>
+				</div>
+				<div class="card-footer d-flex">
+					<div class="btn-group btn-group-sm">
+						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
+						@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+						{
+							<a href="@Url.Action("Index", "Applications", new { openPositionId = Model.OpenPositionId })" class="btn btn-outline-dark" title="Applications"><i class="material-icons">remove_red_eye</i></a>
+						}
+						else
+						{
+							<a href="@Url.Action("Apply", "Applications", new { openPositionId = Model.OpenPositionId })" class="btn btn-outline-dark" title="Apply"><i class="material-icons">post_add</i></a>
+						}
 
-<div>
-	<h4>OpenPosition</h4>
-	<hr />
-	<dl class="dl-horizontal">
-		<dt>
-			@Html.DisplayNameFor(model => model.Location.OfficeNumber)
-		</dt>
-
-		<dd>
-			@Html.DisplayFor(model => model.Location.OfficeNumber)
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.Position.Title)
-		</dt>
-
-		<dd>
-			@Html.DisplayFor(model => model.Position.Title)
-		</dd>
-
-	</dl>
-</div>
-<p>
-	@if (User.IsInRole("Manager") || User.IsInRole("Admin"))
-	{
-		@Html.ActionLink("Applications", "Index", "Applications", new { openPositionId = Model.OpenPositionId }, new { @class = "btn btn-primary" });<span> |</span>
-	}
-	else
-	{
-		@Html.ActionLink("Apply", "Apply", "Applications", new { openPositionId = Model.OpenPositionId }, new { @class = "btn btn-primary" }); <span> |</span>
-	}
-	@Html.ActionLink("Edit", "Edit", new { openPositionId = Model.OpenPositionId }) |
-	@Html.ActionLink("Back to List", "Index")
-</p>
+					</div>
+					@if (User.IsInRole("Admin"))
+					{
+						if (Model.Applications.Count == 0)
+						{
+							<div class="btn-group btn-group-sm ml-auto">
+								<a href="@Url.Action("Edit", new { id = Model.OpenPositionId })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
+								<a href="@Url.Action("Delete", new { id = Model.OpenPositionId })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+							</div>
+						}
+						else
+						{
+							<div class="btn-group btn-group-sm ml-auto">
+								<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
+								<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+							</div>
+						}
+					}
+				</div>
+			</div>
+		</article>
+	</section>
+</main>

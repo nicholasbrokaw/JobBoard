@@ -1,43 +1,72 @@
 ﻿@model IEnumerable<JobBoard.DATA.EF.OpenPosition>
+@using JobBoard.DATA.EF
 
 @{
-	ViewBag.Title = "Index";
-}
-@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-{
-	<p>
-		@Html.ActionLink("Create New", "Create")
-	</p>
-}
-<table class="table">
-	<tr>
-		<th>
-			@Html.DisplayNameFor(model => model.Position.Title)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Location.Summary)
-		</th>
+	ViewBag.Title = "Openings";
 
-		<th></th>
-	</tr>
+	JobBoardEntities db = new JobBoardEntities();
+}
 
-	@foreach (var item in Model)
-	{
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Position.Title)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Location.Summary)
-			</td>
-			<td>
-				@Html.ActionLink("Details", "Details", new { id = item.OpenPositionId })
-				@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+<main>
+	<section id="openingsList">
+		@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+		{
+			<aside class="card-deck mb-3" id="openingsActions">
+				<div class="card shadow col-md-6" id="createOpeningCard">
+					<div class="card-body">
+						<h5>New Opening</h5>
+						<p>Are you hiring? Post your opening on the Job Board!</p>
+						@Html.ActionLink("Create", "Create", "OpenPositions", null, new { @class = "btn btn-warning" })
+					</div>
+				</div>
+				@if (User.IsInRole("Admin"))
 				{
-					<span>|</span> @Html.ActionLink("Delete", "Delete", new { id = item.OpenPositionId })
+					<div class="card shadow col-md-6" id="createPositionCard">
+						<div class="card-body">
+							<h5>New Position</h5>
+							<p>Or maybe you need to add a position from Victisoft, Inc. to the Job Board first.</p>
+							@Html.ActionLink("Create", "Create", "Positions", null, new { @class = "btn btn-warning" })
+						</div>
+					</div>
 				}
-			</td>
-		</tr>
-	}
+			</aside>
+		}
 
-</table>
+		<ul class="list-group shadow-lg">
+			<li class="list-group-item">
+				<div class="row text-center font-weight-bold">
+					<span class="col-6 col-md-3">@Html.DisplayNameFor(model => model.Position.Title)</span>
+					<span class="col-6 d-none d-md-inline-block">@Html.DisplayNameFor(model => model.Location.Summary)</span>
+					<span class="col-6 col-md-3">Actions</span>
+				</div>
+			</li>
+			@foreach (var item in Model)
+			{
+				<li class="list-group-item">
+					<div class="row">
+						<a href="@Url.Action("Details", new { id = item.OpenPositionId })" class="col-6 col-md-3 text-truncate text-nowrap text-reset">@Html.DisplayFor(model => item.Position.Title)</a>
+						<span class="col-6 text-truncate text-center d-none d-md-inline-block">@Html.DisplayFor(model => item.Location.Summary)</span>
+
+						<span class="btn-group btn-group-sm col-6 col-md-3">
+							@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+							{
+								if (db.OpenPositions.Find(item.OpenPositionId).Applications.Count == 0)
+								{
+									<a href="@Url.Action("Delete", new { id = item.OpenPositionId })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+								}
+								else
+								{
+									<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+								}
+							}
+							else
+							{
+								<a href="@Url.Action("Details", new { id = item.OpenPositionId })" class="btn btn-secondary mx-auto col-6"><i class="material-icons">remove_red_eye</i></a>
+							}
+						</span>
+					</div>
+				</li>
+			}
+		</ul>
+	</section>
+</main>
