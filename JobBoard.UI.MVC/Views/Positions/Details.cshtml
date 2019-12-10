@@ -1,54 +1,55 @@
 ﻿@model JobBoard.DATA.EF.Position
 
 @{
-	ViewBag.Title = "Details";
+	ViewBag.Title = "Positions";
 }
 
-<h2>Details</h2>
-
-<div>
-	<h4>Position</h4>
-	<hr />
-	<dl class="dl-horizontal">
-		<dt>
-			@Html.DisplayNameFor(model => model.Title)
-		</dt>
-
-		<dd>
-			@Html.DisplayFor(model => model.Title)
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.Description)
-		</dt>
-
-		<dd>
-			@Html.DisplayFor(model => model.Description)
-		</dd>
-
-	</dl>
-</div>
-<p>
-	@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-	{
-		if (User.IsInRole("Manager"))
-		{
-			<button class="btn btn-primary" onclick="createOpeningFor(@Model.PositionId, true)">
-				New Opening
-			</button>
-		}
-		else
-		{
-			@Html.ActionLink("New Opening", "CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false }, new { @class = "btn btn-primary" })
-		}
-		if (Model.OpenPositions.Count == 0)
-		{
-			@Html.ActionLink("Edit", "Edit", new { id = Model.PositionId }, new { @class = "btn btn-secondary" }) <span>|</span>
-		}
-	}
-	@Html.ActionLink("Openings", "Index", "OpenPositions", new { id = Model.PositionId }, new { @class = "btn btn-primary" })
-	@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
-</p>
+<main>
+	<section class="d-flex justify-content-center" id="positionDetails">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				<div class="card-body">
+					<h5 class="card-title text-center">@Html.DisplayFor(model => model.Title)</h5>
+					<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.Description):</h6>
+					<p class="card-text text-justify">@Html.DisplayFor(model => model.Description)</p>
+				</div>
+				<div class="card-footer d-flex">
+					<div class="btn-group">
+						@if (User.IsInRole("Manager"))
+						{
+							<button class="btn btn-outline-warning" onclick="createOpeningFor(@Model.PositionId, true)">
+								<i class="material-icons">add</i>
+							</button>
+						}
+						@if (User.IsInRole("Admin"))
+						{
+							<a href="@Url.Action("CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false })" class="btn btn-outline-warning"><i class="material-icons">add</i></a>
+						}
+						<a href="@Url.Action("Index", "OpenPositions", new { id = Model.PositionId })" class="btn btn-outline-dark"><i class="material-icons">remove_red_eye</i></a>
+						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
+					</div>
+					@if (User.IsInRole("Admin"))
+					{
+						if (Model.OpenPositions.Count == 0)
+						{
+							<div class="btn-group ml-auto">
+								<a href="@Url.Action("Edit", new { id = Model.PositionId })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
+								<a href="@Url.Action("Delete", new { id = Model.PositionId })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+							</div>
+						}
+						else
+						{
+							<div class="btn-group ml-auto">
+								<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
+								<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+							</div>
+						}
+					}
+				</div>
+			</div>
+		</article>
+	</section>
+</main>
 
 @section scripts
 {
