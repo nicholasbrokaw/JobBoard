@@ -44,7 +44,7 @@
 						<a href="@Url.Action("Details", new { id = item.PositionId })" class="col-6 col-md-3 text-truncate text-nowrap text-reset">@Html.DisplayFor(model => item.Title)</a>
 						<span class="col-6 text-truncate d-none d-md-inline-block">@Html.DisplayFor(model => item.Description)</span>
 
-						<span class="btn-group col-6 col-md-3" role="group">
+						<span class="btn-group btn-group-sm col-6 col-md-3" role="group">
 							@if (User.IsInRole("Admin"))
 							{
 								if (db.Positions.Find(item.PositionId).OpenPositions.Count == 0)

@@ -14,32 +14,32 @@
 					<p class="card-text text-justify">@Html.DisplayFor(model => model.Description)</p>
 				</div>
 				<div class="card-footer d-flex">
-					<div class="btn-group">
+					<div class="btn-group btn-group-sm">
+						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
 						@if (User.IsInRole("Manager"))
 						{
-							<button class="btn btn-outline-warning" onclick="createOpeningFor(@Model.PositionId, true)">
+							<button class="btn btn-outline-dark" onclick="createOpeningFor(@Model.PositionId, true)">
 								<i class="material-icons">add</i>
 							</button>
 						}
 						@if (User.IsInRole("Admin"))
 						{
-							<a href="@Url.Action("CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false })" class="btn btn-outline-warning"><i class="material-icons">add</i></a>
+							<a href="@Url.Action("CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false })" class="btn btn-outline-dark"><i class="material-icons">add</i></a>
 						}
-						<a href="@Url.Action("Index", "OpenPositions", new { id = Model.PositionId })" class="btn btn-outline-dark"><i class="material-icons">remove_red_eye</i></a>
-						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
+						<a href="@Url.Action("Index", "OpenPositions", new { id = Model.PositionId })" class="btn btn-outline-dark" title="Open Positions"><i class="material-icons">remove_red_eye</i></a>
 					</div>
 					@if (User.IsInRole("Admin"))
 					{
 						if (Model.OpenPositions.Count == 0)
 						{
-							<div class="btn-group ml-auto">
+							<div class="btn-group btn-group-sm ml-auto">
 								<a href="@Url.Action("Edit", new { id = Model.PositionId })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
 								<a href="@Url.Action("Delete", new { id = Model.PositionId })" class="btn btn-danger"><i class="material-icons">delete</i></a>
 							</div>
 						}
 						else
 						{
-							<div class="btn-group ml-auto">
+							<div class="btn-group btn-group-sm ml-auto">
 								<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
 								<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
 							</div>
