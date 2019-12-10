@@ -1,55 +1,50 @@
 ﻿@model JobBoard.DATA.EF.Position
 
 @{
-	ViewBag.Title = "Positions";
+    ViewBag.Title = "Edit";
 }
 
-<main>
-	<section class="d-flex justify-content-center" id="positionEdit">
-		<article class="col col-md-8">
-			<div class="card shadow-lg">
-				@using (Html.BeginForm())
-				{
-					@Html.AntiForgeryToken()
+<h2>Edit</h2>
 
-					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-					@Html.HiddenFor(model => model.PositionId)
 
-					<div class="card-body">
-						<h5 class="card-title text-center">
-							Edit Position
-						</h5>
-						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" }):</h6>
-						<div class="mb-3">
-							@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-							@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-						</div>
-						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" }):</h6>
-						<div>
-							@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = "6" } })
-							@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-						</div>
-					</div>
-					<div class="card-footer d-flex">
-						<div class="btn-group">
-							<button type="submit" class="btn btn-outline-success"><i class="material-icons">check_circle</i></button>
-							<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">cancel</i></a>
-						</div>
-						@if (Model.OpenPositions.Count == 0 && User.IsInRole("Admin"))
-						{
-							<a href="@Url.Action("Delete", new { id = Model.PositionId })" class="btn btn-danger ml-auto"><i class="material-icons">delete</i></a>
-						}
-						else
-						{
-							<button class="btn btn-danger ml-auto" disabled><i class="material-icons">delete</i></button>
-						}
-					</div>
-				}
-			</div>
-		</article>
-	</section>
-</main>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Position</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PositionId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 }
