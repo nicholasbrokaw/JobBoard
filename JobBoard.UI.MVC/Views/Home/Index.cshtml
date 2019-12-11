@@ -3,7 +3,7 @@
 }
 
 <main>
-	<section class="row card-deck" id="siteActions">
+	<section class="row card-deck mb-3" id="siteActions">
 		<article class="card col-md-4">
 			<div class="card-body">
 				<h5 class="card-title">Positions</h5>
@@ -25,5 +25,33 @@
 				@Html.ActionLink("Browse", "Index", "Applications", null, new { @class = "btn btn-warning" })
 			</div>
 		</article>
+	</section>
+	<section id="siteInfo">
+		<div class="card">
+			<div class="card-header text-center">
+				<h4 class="card-title">Job Board</h4>
+			</div>
+			<div class="card-body row">
+				<article class="col-12 col-md-6" id="infoPanel">
+					<div class="mb-3">
+						<h5 class="card-title">What's This?</h5>
+						<p class="card-text text-justify">This is a Job board for Victisoft, Inc. Every employee in the company may use this application to browse and apply for openings at any of our locations.</p>
+					</div>
+					<div class="mb-3">
+						<h5 class="card-title">How do I Use it?</h5>
+						<p class="card-text text-justify">If you are an employee here at Victisoft, Inc., <a href="@Url.Action("Login", "Account")" class="text-warning">log in</a> to your company account and navigate to <a href="@Url.Action("Index", "OpenPositions")" class="text-warning">Openings</a>. From there, view and apply to any job you choose. If this is your first time using this Job Board, you may be prompted to submit a résumé.</p>
+					</div>
+				</article>
+				<article class="col-12 col-md-6" id="docPanel">
+					<div class="mb-3 d-flex flex-column">
+						<h5 class="card-title">Project Documentation</h5>
+						<p class="card-text text-justify">
+							This site was created by <a href="https://www.nicholasbrokaw.com" target="_blank" class="text-warning">Nicholas Brokaw</a> as his final project at Centriq Training. If you would like to read more about what this site is capable of, please view the documentation for it via the button below.
+						</p>
+						<a href="" class="btn btn-warning mx-auto" target="_blank" disabled tabindex="-1">Documentation</a>
+					</div>
+				</article>
+			</div>
+		</div>
 	</section>
 </main>
