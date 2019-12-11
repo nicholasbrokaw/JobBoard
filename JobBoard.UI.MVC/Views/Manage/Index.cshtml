@@ -1,77 +1,76 @@
 ﻿@model JobBoard.DATA.EF.UserDetail
 @{
-	ViewBag.Title = "Manage your account";
+	ViewBag.Title = "Account";
 }
 
-<h2>@ViewBag.Title.</h2>
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div class="row">
-	@using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
-	{
-		@Html.AntiForgeryToken()
+<main>
+	<section class="d-flex justify-content-center" id="locationEdit">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				@using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+				{
+					@Html.AntiForgeryToken()
 
-		<div class="form-horizontal">
-			<h4>Need to make some changes?</h4>
-			<hr />
-			@Html.ValidationSummary(true)
-			@Html.HiddenFor(model => model.UserId)
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					@Html.HiddenFor(model => model.UserId)
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.FirstName, new { @class = "col-md-2" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
-					@Html.ValidationMessageFor(model => model.FirstName)
-				</div>
+					<div class="card-body">
+						<h5 class="card-title text-center">
+							Your Account
+						</h5>
+						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" }):</h6>
+						<div class="mb-3">
+							@Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+						</div>
+						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" }):</h6>
+						<div class="mb-3">
+							@Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+							@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<div class="card-body">
+						<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.ResumeFilename):</h6>
+						@if (!Model.ResumeFilename.IsEmpty())
+						{
+							<a href="@Url.Content($"~/Content/resumes/{Model.ResumeFilename}")" target="_blank" title="Click to enlarge"><canvas class="card-img border" id="resumeCanvas"></canvas></a>
+						}
+						else
+						{
+							<p class="card-text">There's nothing to see here...</p>
+						}
+						<div class="mb-3">
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" name="resume" id="resumeUpload" />
+								<label for="resumeUpload" class="custom-file-label">Choose file</label>
+							</div>
+							@Html.ValidationMessageFor(model => model.ResumeFilename, "", new { @class = "text-danger" })
+						</div>
+					</div>
+					<div class="card-footer d-flex">
+						<div class="btn-group">
+							<button type="submit" class="btn btn-outline-success"><i class="material-icons">check_circle</i></button>
+							<a href="@Url.Action("Index", "Home")" class="btn btn-outline-dark"><i class="material-icons">cancel</i></a>
+						</div>
+					</div>
+				}
 			</div>
-			<div class="form-group">
-				@Html.LabelFor(model => model.LastName, new { @class = "col-md-2" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
-					@Html.ValidationMessageFor(model => model.LastName)
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(model => model.ResumeFilename, new { @class = "col-md-2" })
-				<div class="col-md-10">
-					@if (Model.ResumeFilename != null)
-					{
-						@*<embed src="@Url.Content($"~/Content/resumes/{Model.ResumeFilename}")" />*@
-						<canvas id="resumeCanvas"></canvas>
-					}
-					<input type="file" name="resume" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-md-offset-2 col-md-10">
-					@if (TempData["openPosition"] != null)
-					{
-						<input type="number" value="@TempData["openPosition"]" name="openPositionId" hidden />
-						<input type="submit" value="Save and Apply" class="btn btn-default" />
-					}
-					else
-					{
-						<input type="submit" value="Save" class="btn btn-default" />
-					}
-					@if (TempData["success"] != null)
-					{
-						<span class="label label-success">Success!</span>
-					}
-				</div>
-			</div>
-		</div>
-	}
-</div>
+		</article>
+	</section>
+</main>
 
 @section scripts {
+	<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 	<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
-	<script>
+	@if (!Model.ResumeFilename.IsEmpty())
+	{
+		<script>
 		var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
 		var loadingTask = pdfjsLib.getDocument("../../Content/resumes/" + "@Model.ResumeFilename");
 		loadingTask.promise.then(function (pdf) {
 			pdf.getPage(1).then(function (page) {
-				var scale = .8;
+				var scale = 1.6;
 				var viewport = page.getViewport({ scale: scale });
 
 				var canvas = document.getElementById('resumeCanvas');
@@ -85,6 +84,12 @@
 				};
 				page.render(renderContext);
 			});
+		});
+		</script>
+	}
+	<script>
+		$(document).ready(() => {
+			bsCustomFileInput.init();
 		});
 	</script>
 }
