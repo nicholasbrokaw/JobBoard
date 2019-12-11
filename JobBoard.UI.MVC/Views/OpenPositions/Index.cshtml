@@ -29,6 +29,28 @@
 						</div>
 					</div>
 				}
+				else
+				{
+					<div class="card shadow col-md-6" id="viewApplicationsCard">
+						<div class="card-body">
+							<h5>Review Applications</h5>
+							<p>See who applied to your openings!</p>
+							@Html.ActionLink("Review", "Index", "Applications", null, new { @class = "btn btn-warning" })
+						</div>
+					</div>
+				}
+			</aside>
+		}
+		else
+		{
+			<aside class="card-deck mb-3" id="openingsActions">
+				<div class="card shadow col-md-6" id="viewApplicationsCard">
+					<div class="card-body">
+						<h5>Review Applications</h5>
+						<p>Check up on the status of your applications.</p>
+						@Html.ActionLink("Check Statuses", "Index", "Applications", null, new { @class = "btn btn-warning" })
+					</div>
+				</div>
 			</aside>
 		}
 

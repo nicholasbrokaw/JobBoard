@@ -46,6 +46,13 @@
 							</div>
 							@Html.ValidationMessageFor(model => model.ResumeFilename, "", new { @class = "text-danger" })
 						</div>
+						@if (TempData["openPosition"] != null)
+						{
+							<div class="alert alert-warning">
+								Add a résumé to your account to finish applying.
+							</div>
+							<input type="number" name="openPositionId" value="@TempData["openPosition"]" hidden />
+						}
 					</div>
 					<div class="card-footer d-flex">
 						<div class="btn-group">

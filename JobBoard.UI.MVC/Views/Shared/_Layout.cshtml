@@ -15,8 +15,8 @@
 	@Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body class="d-flex flex-column">
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3 shadow">
+<body class="d-flex flex-column pt-5">
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-3 shadow">
 		<div class="container">
 			<a href="@Url.Action("Index", "Home")" class="navbar-brand"><img src="@Url.Content("~/Content/images/logo.png")" width="30" height="30" class="d-inline-block align-top" /> Victisoft, Inc.</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,15 +35,15 @@
 					<li class="nav-item">
 						@Html.ActionLink("Openings", "Index", "OpenPositions", null, new { @class = "nav-link" })
 					</li>
+					<li class="nav-item">
+						@Html.ActionLink("Applications", "Index", "Applications", null, new { @class = "nav-link" })
+					</li>
 					@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
 					{
 						<li class="nav-item">
 							@Html.ActionLink("Statuses", "Index", "ApplicationStatuses", null, new { @class = "nav-link" })
 						</li>
 					}
-					<li class="nav-item">
-						@Html.ActionLink("Applications", "Index", "Applications", null, new { @class = "nav-link" })
-					</li>
 					@if (Request.IsAuthenticated && User.IsInRole("Admin"))
 					{
 						<li class="nav-item">@Html.ActionLink("Roles", "Index", "RolesAdmin", null, new { @class = "nav-link" })</li>
@@ -55,7 +55,7 @@
 		</div>
 	</nav>
 
-	<div class="container mb-3">
+	<div class="container mt-4 mb-3">
 		@RenderBody()
 	</div>
 

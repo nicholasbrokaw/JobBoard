@@ -3,22 +3,22 @@
 }
 
 <main>
-	<section class="row card-deck mb-3" id="siteActions">
-		<article class="card col-md-4">
+	<section class="card-deck mb-3" id="siteActions">
+		<article class="card shadow col-md-4">
 			<div class="card-body">
 				<h5 class="card-title">Positions</h5>
 				<p class="card-text">Browse a list of Victisoft, Inc.'s current positions.</p>
 				@Html.ActionLink("Browse", "Index", "Positions", null, new { @class = "btn btn-warning mt-auto" })
 			</div>
 		</article>
-		<article class="card col-md-4">
+		<article class="card shadow col-md-4">
 			<div class="card-body">
 				<h5 class="card-title">Openings</h5>
 				<p class="card-text">View and apply to currently open positions at Victisoft, Inc.</p>
 				@Html.ActionLink("Browse", "Index", "OpenPositions", null, new { @class = "btn btn-warning" })
 			</div>
 		</article>
-		<article class="card col-md-4">
+		<article class="card shadow col-md-4">
 			<div class="card-body">
 				<h5 class="card-title">Applications</h5>
 				<p class="card-text">See your applications to Victisoft, Inc.'s open positions.</p>
@@ -27,7 +27,7 @@
 		</article>
 	</section>
 	<section id="siteInfo">
-		<div class="card">
+		<div class="card shadow-lg">
 			<div class="card-header text-center">
 				<h4 class="card-title">Job Board</h4>
 			</div>

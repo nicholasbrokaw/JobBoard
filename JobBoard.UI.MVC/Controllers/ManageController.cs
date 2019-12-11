@@ -76,7 +76,7 @@ namespace JobBoard.UI.MVC.Controllers
 				}
 
 				#region Resume File Handling
-				string fileName = "";
+				string fileName = user.ResumeFilename != null ? user.ResumeFilename : "";
 				if (resume != null)
 				{
 					fileName = resume.FileName;
@@ -92,7 +92,7 @@ namespace JobBoard.UI.MVC.Controllers
 					}
 					else
 					{
-						fileName = "";
+						fileName = user.ResumeFilename != null ? user.ResumeFilename : "";
 					}
 				}
 				user.ResumeFilename = fileName;

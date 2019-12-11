@@ -5,17 +5,18 @@
 }
 
 <main>
-	@if (User.IsInRole("Admin"))
-	{
 	<aside class="card-deck mb-3" id="statusActions">
-		<div class="card shadow" id="createStatusCard">
-			<div class="card-body">
-				<h5>New Status</h5>
-				<p>Are the current statuses not cutting it? Add a new one!</p>
-				@Html.ActionLink("Create Status", "Create", "ApplicationStatuses", null, new { @class = "btn btn-warning" })
+		@if (User.IsInRole("Admin"))
+		{
+			<div class="card shadow col-md-6" id="createStatusCard">
+				<div class="card-body">
+					<h5>New Status</h5>
+					<p>Are the current statuses not cutting it? Add a new one!</p>
+					@Html.ActionLink("Create Status", "Create", "ApplicationStatuses", null, new { @class = "btn btn-warning" })
+				</div>
 			</div>
-		</div>
-		<div class="card shadow" id="createStatusCard">
+		}
+		<div class="card shadow col-md-6" id="createStatusCard">
 			<div class="card-body">
 				<h5>Applications</h5>
 				<p>If you meant to review applications, click the button below!</p>
@@ -23,7 +24,6 @@
 			</div>
 		</div>
 	</aside>
-	}
 	<section class="card-deck mb-3" id="openingDetails">
 		@foreach (var item in Model)
 		{

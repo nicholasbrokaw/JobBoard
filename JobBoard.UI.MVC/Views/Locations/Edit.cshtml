@@ -34,7 +34,7 @@
 							@Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
 							@Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
 						</div>
-						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.ManagerId, "Manager", htmlAttributes: new { @class = "control-label" })</h6>
+						<h6 class="card-subtitle mb-2 text-muted">@Html.LabelFor(model => model.ManagerId, "Manager", htmlAttributes: new { @class = "control-label" }):</h6>
 						<div>
 							@Html.DropDownList("ManagerId", null, htmlAttributes: new { @class = "form-control" })
 							@Html.ValidationMessageFor(model => model.ManagerId, "", new { @class = "text-danger" })
