@@ -26,7 +26,7 @@
 						{
 							<a href="@Url.Action("CreateFor", "OpenPositions", new { positionId = Model.PositionId, isFetch = false })" class="btn btn-outline-dark"><i class="material-icons">add</i></a>
 						}
-						<a href="@Url.Action("Index", "OpenPositions", new { id = Model.PositionId })" class="btn btn-outline-dark" title="Open Positions"><i class="material-icons">remove_red_eye</i></a>
+						<a href="@Url.Action("Index", "OpenPositions", new { positionId = Model.PositionId })" class="btn btn-outline-dark" title="Open Positions"><i class="material-icons">remove_red_eye</i></a>
 					</div>
 					@if (User.IsInRole("Admin"))
 					{

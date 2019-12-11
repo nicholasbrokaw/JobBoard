@@ -18,11 +18,20 @@ namespace JobBoard.UI.MVC.Controllers
 
 		// GET: OpenPositions
 		[Authorize(Roles = "Admin, Manager, Employee")]
-		public ActionResult Index()
+		public ActionResult Index(int? positionId)
 		{
 			string managerId = User.IsInRole("Manager") ? User.Identity.GetUserId() : null;
-			var openPositions = !User.IsInRole("Manager") ? db.OpenPositions.Include(o => o.Location).Include(o => o.Position) : db.OpenPositions.Include(o => o.Location).Include(o => o.Position).Where(o => o.Location.ManagerId == managerId);
-			return View(openPositions.ToList());
+			List<OpenPosition> openPositions;
+			if (positionId != null)
+			{
+				openPositions = !User.IsInRole("Manager") ? db.OpenPositions.Include(o => o.Location).Include(o => o.Position).Where(o => o.PositionId == positionId).ToList() : db.OpenPositions.Include(o => o.Location).Include(o => o.Position).Where(o => o.Location.ManagerId == managerId && o.PositionId == positionId).ToList();
+			}
+			else
+			{
+				openPositions = !User.IsInRole("Manager") ? db.OpenPositions.Include(o => o.Location).Include(o => o.Position).ToList() : db.OpenPositions.Include(o => o.Location).Include(o => o.Position).Where(o => o.Location.ManagerId == managerId).ToList();
+			}
+
+			return View(openPositions);
 		}
 
 		// GET: OpenPositions/Details/5
