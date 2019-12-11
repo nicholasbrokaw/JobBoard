@@ -62,7 +62,7 @@ namespace JobBoard.DATA.EF
 	{
 		[Required(ErrorMessage = "*")]
 		[StringLength(10, ErrorMessage = "Value can be a maximum of 10 characters")]
-		[Display(Name = "Office Number")]
+		[Display(Name = "Office")]
 		public string OfficeNumber { get; set; }
 
 		[Required(ErrorMessage = "*")]
