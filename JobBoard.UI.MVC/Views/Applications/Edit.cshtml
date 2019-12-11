@@ -4,75 +4,72 @@
 	ViewBag.Title = "Review";
 }
 
-@using (Html.BeginForm())
-{
-	@Html.AntiForgeryToken()
+<main>
+	<section class="d-flex justify-content-center" id="openingDetails">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				@using (Html.BeginForm())
+				{
+					@Html.AntiForgeryToken()
 
-	<div class="form-horizontal">
-		<h4>Application</h4>
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.ApplicationId)
-		@Html.HiddenFor(model => model.OpenPositionId)
-		@Html.HiddenFor(model => model.UserId)
-		@Html.HiddenFor(model => model.ApplicationDate)
-		@Html.HiddenFor(model => model.ResumeFilename)
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.OpenPositionId, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.DisplayFor(model => model.OpenPosition.Position.Title)
+					@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+					@Html.HiddenFor(model => model.ApplicationId)
+					@Html.HiddenFor(model => model.OpenPositionId)
+					@Html.HiddenFor(model => model.UserId)
+					@Html.HiddenFor(model => model.ApplicationDate)
+					@Html.HiddenFor(model => model.ResumeFilename)
+					<div class="card-body">
+						<h5 class="card-title text-center mb-3">@Html.DisplayFor(model => model.OpenPosition.Position.Title)</h5>
+						<div class="row mb-3">
+							<div class="col-12 col-md-4">
+								<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.Summary):</h6>
+								<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.City), @Html.DisplayFor(model => model.OpenPosition.Location.State)</span>
+							</div>
+							<div class="col-12 col-md-4 text-md-center">
+								<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.OfficeNumber):</h6>
+								<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.OfficeNumber)</span>
+							</div>
+							<div class="col-12 col-md-4 text-md-right">
+								<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.ManagerId):</h6>
+								<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.UserDetail.FullName)</span>
+							</div>
+						</div>
+						<hr />
+						<div class="row mb-3">
+							<div class="col-12 col-md-6">
+								<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.UserId):</h6>
+								<span class="card-text">@Html.DisplayFor(model => model.UserDetail.FullName)</span>
+							</div>
+							<div class="col-12 col-md-6 text-md-right">
+								<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.ApplicationDate):</h6>
+								<span class="card-text">@Html.DisplayFor(model => model.ApplicationDate)</span>
+							</div>
+						</div>
+						<hr />
+					</div>
+					<div class="card-body">
+						<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.ResumeFilename):</h6>
+						<a href="@Url.Content($"~/Content/resumes/{Model.ResumeFilename}")" target="_blank" title="Click to enlarge"><canvas class="card-img border" id="resumeCanvas"></canvas></a>
+					</div>
+					<div class="card-body">
+						<h6 class="card-subtitle text-muted">@Html.LabelFor(model => model.ManagerNotes):</h6>
+						@Html.EditorFor(model => model.ManagerNotes, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.ManagerNotes, "", new { @class = "text-danger" })
+						<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.LabelFor(model => model.ApplicationStatusId, "Status"):</h6>
+						@Html.DropDownList("ApplicationStatusId", null, htmlAttributes: new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.ApplicationStatusId, "", new { @class = "text-danger" })
+					</div>
+					<div class="card-footer d-flex">
+						<div class="btn-group btn-group-sm">
+							<button type="submit" class="btn btn-outline-success"><i class="material-icons">check_circle</i></button>
+							<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">cancel</i></a>
+						</div>
+					</div>
+				}
 			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.DisplayFor(model => model.UserDetail.FullName)
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.ApplicationDate, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.DisplayFor(model => model.ApplicationDate)
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.ResumeFilename, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				<canvas id="resumeCanvas"></canvas>
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.ManagerNotes, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(model => model.ManagerNotes, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.ManagerNotes, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			@Html.LabelFor(model => model.ApplicationStatusId, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.DropDownList("ApplicationStatusId", null, htmlAttributes: new { @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.ApplicationStatusId, "", new { @class = "text-danger" })
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Save" class="btn btn-default" />
-			</div>
-		</div>
-	</div>
-}
-
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>
+		</article>
+	</section>
+</main>
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
@@ -84,7 +81,7 @@
 		var loadingTask = pdfjsLib.getDocument("../../Content/resumes/" + "@Model.ResumeFilename");
 		loadingTask.promise.then(function (pdf) {
 			pdf.getPage(1).then(function (page) {
-				var scale = .8;
+				var scale = 1.6;
 				var viewport = page.getViewport({ scale: scale });
 
 				var canvas = document.getElementById('resumeCanvas');

@@ -2,79 +2,78 @@
 @using JobBoard.DATA.EF
 
 @{
-	ViewBag.Title = "Review Application";
+	ViewBag.Title = "Applications";
 
 	JobBoardEntities db = new JobBoardEntities();
 }
 
-<h2>@ViewBag.Title</h2>
-
-<div>
-	<h4>Application</h4>
-	<hr />
-	<dl class="dl-horizontal">
-
-		<dt>
-			@Html.DisplayNameFor(model => model.OpenPosition.Position.Title)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.OpenPosition.Position.Title)
-		</dd>
-
-		@if (!User.IsInRole("Employee"))
-		{
-			<dt>
-				@Html.DisplayNameFor(model => model.UserDetail.FullName)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.UserDetail.FullName)
-			</dd>
-
-			<dt>
-				@Html.DisplayNameFor(model => model.ManagerNotes)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.ManagerNotes)
-			</dd>
-		}
-
-		<dt>
-			@Html.DisplayNameFor(model => model.ApplicationDate)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.ApplicationDate)
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.ResumeFilename)
-		</dt>
-		<dd>
-			<canvas id="resumeCanvas"></canvas>
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.OpenPosition.Location.Summary)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.OpenPosition.Location.Summary)
-		</dd>
-
-		<dt>
-			@Html.DisplayNameFor(model => model.ApplicationStatus.StatusName)
-		</dt>
-		<dd>
-			@Html.DisplayFor(model => model.ApplicationStatus.StatusName)
-		</dd>
-
-	</dl>
-</div>
-<p>
-	@if (Model.ApplicationStatusId == db.ApplicationStatuses.Where(s => s.StatusName.ToLower() == "pending").Select(s => s.ApplicationStatusId).Single() && User.IsInRole("Manager"))
-	{
-		@Html.ActionLink("Edit", "Edit", new { id = Model.ApplicationId }) <span>|</span>
-	}
-	@Html.ActionLink("Back to List", "Index")
-</p>
+<main>
+	<section class="d-flex justify-content-center" id="openingDetails">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				<div class="card-body">
+					<h5 class="card-title text-center mb-3">@Html.DisplayFor(model => model.OpenPosition.Position.Title)</h5>
+					<div class="row mb-3">
+						<div class="col-12 col-md-4">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.Summary):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.City), @Html.DisplayFor(model => model.OpenPosition.Location.State)</span>
+						</div>
+						<div class="col-12 col-md-4 text-md-center">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.OfficeNumber):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.OfficeNumber)</span>
+						</div>
+						<div class="col-12 col-md-4 text-md-right">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.OpenPosition.Location.ManagerId):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.OpenPosition.Location.UserDetail.FullName)</span>
+						</div>
+					</div>
+					<hr />
+					<div class="row mb-3">
+						<div class="col-12 col-md-6">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.UserId):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.UserDetail.FullName)</span>
+						</div>
+						<div class="col-12 col-md-6 text-md-right">
+							<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.ApplicationDate):</h6>
+							<span class="card-text">@Html.DisplayFor(model => model.ApplicationDate)</span>
+						</div>
+					</div>
+					<hr />
+				</div>
+				<div class="card-body">
+					<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.ResumeFilename):</h6>
+					<a href="@Url.Content($"~/Content/resumes/{Model.ResumeFilename}")" target="_blank" title="Click to enlarge"><canvas class="card-img border" id="resumeCanvas"></canvas></a>
+				</div>
+				<div class="card-body">
+					<h6 class="card-subtitle mb-3 text-muted">@Html.DisplayNameFor(model => model.ManagerNotes):</h6>
+					<p class="card-text">@Html.DisplayFor(model => model.ManagerNotes)</p>
+					<h6 class="card-subtitle mb-3 text-muted d-inline">@Html.DisplayNameFor(model => model.ApplicationStatusId):</h6>
+					<span class="card-text">
+						<i class="small material-icons">
+							@if (Model.ApplicationStatus.StatusName.ToLower() == "approved")
+							{
+								@Html.Raw("check_circle")
+							}
+							else if (Model.ApplicationStatus.StatusName.ToLower() == "pending")
+							{
+								@Html.Raw("help")
+							}
+							else if (Model.ApplicationStatus.StatusName.ToLower() == "rejected")
+							{
+								@Html.Raw("cancel")
+							}
+						</i> @Html.DisplayFor(model => model.ApplicationStatus.StatusName)
+					</span>
+				</div>
+				<div class="card-footer d-flex">
+					<div class="btn-group btn-group-sm">
+						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
+					</div>
+				</div>
+			</div>
+		</article>
+	</section>
+</main>
 
 @section scripts {
 	<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
@@ -84,7 +83,7 @@
 		var loadingTask = pdfjsLib.getDocument("../../Content/resumes/" + "@Model.ResumeFilename");
 		loadingTask.promise.then(function (pdf) {
 			pdf.getPage(1).then(function (page) {
-				var scale = .8;
+				var scale = 1.6;
 				var viewport = page.getViewport({ scale: scale });
 
 				var canvas = document.getElementById('resumeCanvas');

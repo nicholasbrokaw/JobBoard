@@ -2,69 +2,81 @@
 @using JobBoard.DATA.EF
 
 @{
-	ViewBag.Title = "Index";
+	ViewBag.Title = "Applications";
 
 	JobBoardEntities db = new JobBoardEntities();
 }
 
-<table class="table">
-	<tr>
-		<th>
-			@Html.DisplayNameFor(model => model.ApplicationDate)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.OpenPosition.Position.Title)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.OpenPosition.Location.Summary)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.ApplicationStatus.StatusName)
-		</th>
-		@if (!User.IsInRole("Employee"))
+<main>
+	<section id="applicationsList">
+		@if (User.IsInRole("Manager") || User.IsInRole("Admin"))
 		{
-			<th>
-				@Html.DisplayNameFor(model => model.UserDetail.FullName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ManagerNotes)
-			</th>
+			<aside class="card-deck mb-3" id="positionsActions">
+				<div class="card shadow" id="createOpeningCard">
+					<div class="card-body">
+						<h5>New Opening</h5>
+						<p>Post an opening on the Job Board so employees can apply to it!</p>
+						@Html.ActionLink("Post Opening", "Create", "OpenPositions", null, new { @class = "btn btn-warning" })
+					</div>
+				</div>
+				@if (User.IsInRole("Admin"))
+				{
+					<div class="card shadow" id="createLocationCard">
+						<div class="card-body">
+							<h5>New Location</h5>
+							<p>Need another status for the application review process? Then go make one!</p>
+							@Html.ActionLink("New Status", "Create", "ApplicationStatuses", null, new { @class = "btn btn-warning" })
+						</div>
+					</div>
+				}
+			</aside>
 		}
-		<th></th>
-	</tr>
 
-	@foreach (var item in Model)
-	{
-	<tr>
-		<td>
-			@Html.DisplayFor(modelItem => item.ApplicationDate)
-		</td>
-		<td>
-			@Html.DisplayFor(modelItem => item.OpenPosition.Position.Title)
-		</td>
-		<td>
-			@Html.DisplayFor(modelItem => item.OpenPosition.Location.Summary)
-		</td>
-		<td>
-			@Html.DisplayFor(modelItem => item.ApplicationStatus.StatusName)
-		</td>
-		@if (!User.IsInRole("Employee"))
-		{
-			<td>
-				@Html.DisplayFor(modelItem => item.UserDetail.FullName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.ManagerNotes)
-			</td>
-		}
-		<td>
-			@if (item.ApplicationStatusId == db.ApplicationStatuses.Where(s => s.StatusName.ToLower() == "pending").Select(s => s.ApplicationStatusId).Single() && User.IsInRole("Manager"))
+		<ul class="list-group shadow-lg">
+			<li class="list-group-item">
+				<div class="row font-weight-bold">
+					<span class="col-6 col-md-3">@Html.DisplayNameFor(model => model.OpenPositionId)</span>
+					<span class="col-3 d-none d-md-inline-block">@Html.DisplayNameFor(model => model.OpenPosition.LocationId)</span>
+					<span class="col-2 d-none d-md-inline-block">@Html.DisplayNameFor(model => model.UserId)</span>
+					<span class="col-2 col-md-1">@Html.DisplayNameFor(model => model.ApplicationStatusId)</span>
+					<span class="col-4 col-md-3 text-center">Actions</span>
+				</div>
+			</li>
+			@foreach (var item in Model)
 			{
-				@Html.ActionLink("Edit", "Edit", new { id = item.ApplicationId }) <span>|</span>
-			}
-			@Html.ActionLink("Details", "Details", new { id = item.ApplicationId })
-		</td>
-	</tr>
-	}
+				<li class="list-group-item">
+					<div class="row">
+						<a href="@Url.Action("Details", new { id = item.ApplicationId })" class="col-6 col-md-3 text-truncate text-nowrap text-reset">@Html.DisplayFor(model => item.OpenPosition.Position.Title)</a>
+						<span class="col-3 d-none d-md-inline-block text-truncate">@Html.DisplayFor(model => item.OpenPosition.Location.Summary)</span>
+						<span class="col-2 d-none d-md-inline-block text-truncate">@Html.DisplayFor(model => item.UserDetail.FullName)</span>
+						<span class="col-2 col-md-1 text-truncate">
+							@if (item.ApplicationStatus.StatusName.ToLower() == "approved")
+							{
+								<i class="material-icons text-success">check_circle</i>
+							}
+							else if (item.ApplicationStatus.StatusName.ToLower() == "pending")
+							{
+								<i class="material-icons text-secondary">help</i>
+							}
+							else if (item.ApplicationStatus.StatusName.ToLower() == "rejected")
+							{
+								<i class="material-icons text-danger">cancel</i>
+							}
+						</span>
 
-</table>
+						<span class="btn-group btn-group-sm col-4 col-md-3" role="group">
+							@if (item.ApplicationStatusId == db.ApplicationStatuses.Where(s => s.StatusName.ToLower() == "pending").Select(s => s.ApplicationStatusId).Single() && User.IsInRole("Manager"))
+							{
+								<a href="@Url.Action("Edit", new { id = item.ApplicationId })" class="btn btn-sm btn-secondary mx-auto col-6"><i class="material-icons">edit</i></a>
+							}
+							else
+							{
+								<a href="@Url.Action("Details", new { id = item.ApplicationId })" class="btn btn-sm btn-secondary mx-auto col-6"><i class="material-icons">remove_red_eye</i></a>
+							}
+						</span>
+					</div>
+				</li>
+			}
+		</ul>
+	</section>
+</main>
