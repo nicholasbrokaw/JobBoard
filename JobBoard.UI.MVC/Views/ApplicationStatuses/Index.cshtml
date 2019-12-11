@@ -1,48 +1,58 @@
 ﻿@model IEnumerable<JobBoard.DATA.EF.ApplicationStatus>
 
 @{
-	ViewBag.Title = "Index";
+	ViewBag.Title = "Statuses";
 }
 
-<h2>Index</h2>
-
-@if (User.IsInRole("Admin"))
-{
-	<p>
-		@Html.ActionLink("Create New", "Create")
-	</p>
-}
-<table class="table">
-	<tr>
-		<th>
-			@Html.DisplayNameFor(model => model.StatusName)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Description)
-		</th>
-		@if (User.IsInRole("Admin"))
-		{
-			<th></th>
-		}
-	</tr>
-
-	@foreach (var item in Model)
+<main>
+	@if (User.IsInRole("Admin"))
 	{
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.StatusName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Description)
-			</td>
-			@if (User.IsInRole("Admin"))
-			{
-				<td>
-					@Html.ActionLink("Edit", "Edit", new { id = item.ApplicationStatusId }) |
-					@Html.ActionLink("Delete", "Delete", new { id = item.ApplicationStatusId })
-				</td>
-			}
-		</tr>
+	<aside class="card-deck mb-3" id="statusActions">
+		<div class="card shadow" id="createStatusCard">
+			<div class="card-body">
+				<h5>New Status</h5>
+				<p>Are the current statuses not cutting it? Add a new one!</p>
+				@Html.ActionLink("Create Status", "Create", "ApplicationStatuses", null, new { @class = "btn btn-warning" })
+			</div>
+		</div>
+		<div class="card shadow" id="createStatusCard">
+			<div class="card-body">
+				<h5>Applications</h5>
+				<p>If you meant to review applications, click the button below!</p>
+				@Html.ActionLink("Review Applications", "Index", "Applications", null, new { @class = "btn btn-warning" })
+			</div>
+		</div>
+	</aside>
 	}
-
-</table>
+	<section class="card-deck mb-3" id="openingDetails">
+		@foreach (var item in Model)
+		{
+			<article class="mb-3 card shadow">
+				<div class="card-body">
+					<h5 class="card-title text-center mb-3">@Html.DisplayFor(modelItem => item.StatusName)</h5>
+					<div>
+						<h6 class="card-subtitle mb-3 text-muted">Description:</h6>
+						<p class="card-text text-justify">@Html.DisplayFor(modelItem => item.Description)</p>
+					</div>
+				</div>
+				@if (User.IsInRole("Admin"))
+				{
+					<div class="card-footer d-flex">
+						<div class="btn-group btn-group-sm" role="group">
+							@if (item.StatusName.ToLower() != "approved" && item.StatusName.ToLower() != "pending" && item.StatusName.ToLower() != "rejected" && item.Applications.Count == 0)
+							{
+								<a href="@Url.Action("Edit", new { id = item.ApplicationStatusId })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
+								<a href="@Url.Action("Delete", new { id = item.ApplicationStatusId })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+							}
+							else
+							{
+								<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
+								<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+							}
+						</div>
+					</div>
+				}
+			</article>
+		}
+	</section>
+</main>

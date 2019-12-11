@@ -51,6 +51,7 @@ namespace JobBoard.DATA.EF
 
 		[StringLength(250, ErrorMessage = "Value can be a maximum of 250 characters")]
 		[DisplayFormat(NullDisplayText = "n/a")]
+		[UIHint("MultilineText")]
 		public string Description { get; set; }
 	}
 
