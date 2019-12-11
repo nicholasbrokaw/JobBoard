@@ -1,36 +1,59 @@
 ﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@using JobBoard.DATA.EF
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Roles";
+
+	JobBoardEntities db = new JobBoardEntities();
 }
 
-<h2>Index</h2>
+<main>
+	<section id="rolesList">
+		<aside class="card-deck mb-3" id="positionsActions">
+			<div class="card shadow col-md-6" id="createPositionCard">
+				<div class="card-body">
+					<h5>New Role</h5>
+					<p>Make a new role for Victisoft, Inc.'s Job Board!</p>
+					@Html.ActionLink("Create Role", "Create", "RolesAdmin", null, new { @class = "btn btn-warning" })
+				</div>
+			</div>
+			<div class="card shadow col-md-6" id="createLocationCard">
+				<div class="card-body">
+					<h5>See Users</h5>
+					<p>Did you mean to see a list of users?</p>
+					@Html.ActionLink("View List", "Index", "UsersAdmin", null, new { @class = "btn btn-warning" })
+				</div>
+			</div>
+		</aside>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
+		<ul class="list-group shadow-lg">
+			<li class="list-group-item">
+				<div class="row text-center font-weight-bold">
+					<span class="col-6">@Html.DisplayNameFor(model => model.Name)</span>
+					<span class="col-6">Actions</span>
+				</div>
+			</li>
+			@foreach (var item in Model)
+			{
+				<li class="list-group-item">
+					<div class="row">
+						<a href="@Url.Action("Details", new { id = item.Id })" class="col-6 text-truncate text-center text-nowrap text-reset">@Html.DisplayFor(model => item.Name)</a>
 
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-    }
-
-</table>
+						<span class="btn-group btn-group-sm col-6" role="group">
+							@if (db.AspNetUserRoles.Where(r => r.RoleId == item.Id).Count() == 0)
+							{
+								<a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
+								<a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+							}
+							else
+							{
+								<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
+								<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+							}
+						</span>
+					</div>
+				</li>
+			}
+		</ul>
+	</section>
+</main>

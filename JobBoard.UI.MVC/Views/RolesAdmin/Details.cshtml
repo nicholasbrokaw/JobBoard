@@ -1,45 +1,50 @@
 ﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Roles";
 }
 
-<h2>Details.</h2>
-
-<div>
-    <h4>Roles.</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-</div>
-<h4>List of users in this role</h4>
-@if (ViewBag.UserCount == 0)
-{
-    <hr />
-    <p>No users found in this role.</p>
-}
-
-<table class="table">
-
-    @foreach (var item in ViewBag.Users)
-    {
-        <tr>
-            <td>
-                @item.UserName
-            </td>
-        </tr>
-    }
-</table>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-
-
+<main>
+	<section class="d-flex justify-content-center" id="positionDetails">
+		<article class="col col-md-8">
+			<div class="card shadow-lg">
+				<div class="card-body">
+					<h5 class="card-title text-center">@Html.DisplayFor(model => model.Name)</h5>
+					<h6 class="card-subtitle mb-3 text-muted">Users with "@Html.DisplayFor(model => model.Name)" Role:</h6>
+					@if (ViewBag.UserCount > 0)
+					{
+						<ul class="list-group list-group-flush">
+							@foreach (var item in ViewBag.Users)
+							{
+								<li class="list-group-item">@item.UserName</li>
+							}
+						</ul>
+					}
+					else
+					{
+						<p class="card-text">There are none!</p>
+					}
+				</div>
+				<div class="card-footer d-flex">
+					<div class="btn-group btn-group-sm">
+						<a href="@Url.Action("Index")" class="btn btn-outline-dark"><i class="material-icons">arrow_back</i></a>
+					</div>
+					@if (ViewBag.UserCount == 0)
+					{
+						<div class="btn-group btn-group-sm ml-auto">
+							<a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-secondary"><i class="material-icons">edit</i></a>
+							<a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger"><i class="material-icons">delete</i></a>
+						</div>
+					}
+					else
+					{
+						<div class="btn-group btn-group-sm ml-auto">
+							<button class="btn btn-secondary" disabled><i class="material-icons">edit</i></button>
+							<button class="btn btn-danger" disabled><i class="material-icons">delete</i></button>
+						</div>
+					}
+				</div>
+			</div>
+		</article>
+	</section>
+</main>
